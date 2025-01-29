@@ -18,7 +18,15 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: true
-
+    
+    - name: Install dependencies
+      if: matrix.config.name != 'Tarball'
+      run:  |
+        sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+        sudo apt update
+        sudo apt install cmake libboost-dev libasound-dev libjack-jackd2-dev clang libc++-dev
+      shell: bash
+      
     - name: Build SDist
       run: pipx run build --sdist
 
@@ -44,6 +52,20 @@ jobs:
       with:
         submodules: true
 
+    - name: Install dependencies
+      if: matrix.config.name != 'Tarball'
+      run:  |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+          sudo apt update
+          sudo apt install cmake libboost-dev libasound-dev libjack-jackd2-dev clang libc++-dev
+        else
+          curl -L https://github.com/ossia/sdk/releases/download/sdk31/boost_1_86_0.tar.gz > boost.tar.gz
+          tar -xzf boost.tar.gz
+          rm boost.tar.gz
+        fi
+      shell: bash
+      
     - uses: pypa/cibuildwheel@v2.22
       with:
         package-dir: ./bindings/python
