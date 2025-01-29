@@ -3,6 +3,7 @@ project(pylibremidi)
 
 set(LIBREMIDI_HEADER_ONLY 1)
 set(LIBREMIDI_NEEDS_READERWRITERQUEUE 1)
+set(LIBREMIDI_FIND_BOOST 1)
 add_subdirectory(../.. libremidi-src)
 find_package(Python 3.8 COMPONENTS Interpreter Development.Module REQUIRED)
 
