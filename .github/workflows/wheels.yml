@@ -28,7 +28,7 @@ jobs:
       shell: bash
       
     - name: Build SDist
-      run: pipx run build --sdist
+      run: pipx run build --sdist ./bindings/python
 
     - name: Check metadata
       run: pipx run twine check dist/*
