@@ -57,11 +57,17 @@ jobs:
       run:  |
         if [ "$RUNNER_OS" == "Linux" ]; then
           sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
-          sudo apt update
-          sudo apt install cmake libboost-dev libasound-dev libjack-jackd2-dev clang libc++-dev
+          # sudo apt update # we will install these later in an isolated container managed by cibuildwheel
+          # sudo apt install cmake libboost-dev libasound-dev libjack-jackd2-dev clang libc++-dev
+        elif [ "$RUNNER_OS" == "Windows" ]; then
+          curl -L https://github.com/ossia/sdk/releases/download/sdk31/boost_1_86_0.tar.gz > boost.tar.gz
+          tar -xzf boost.tar.gz -C /c/
+          ln -s /c/boost_1_86_0/boost /c/boost
+          rm boost.tar.gz
         else
           curl -L https://github.com/ossia/sdk/releases/download/sdk31/boost_1_86_0.tar.gz > boost.tar.gz
           tar -xzf boost.tar.gz
+          # export ROOT_BOOST perhaps?
           rm boost.tar.gz
         fi
       shell: bash

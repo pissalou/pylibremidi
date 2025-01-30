@@ -40,6 +40,15 @@ build-verbosity = 1
 # Don't test Python 3.8 wheels on macOS/arm64
 # test-skip="cp38-macosx_*:arm64"
 
+[tool.cibuildwheel.linux]
+# On linux, builds take place in isolated containers managed by cibuildwheel
+# This command will run inside the container before the wheel builds start.
+before-all = "apt update && apt install libboost-dev libasound-dev libjack-jackd2-dev"
+test-command = "apt info libboost-dev libasound-dev libjack-jackd2-dev"
+
+[tool.cibuildwheel.windows.environment]
+BOOST_ROOT = "C:\\boost"
+
 # Needed for full C++17 support
 [tool.cibuildwheel.macos.environment]
 MACOSX_DEPLOYMENT_TARGET = "10.14"
