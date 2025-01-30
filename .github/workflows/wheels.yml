@@ -31,7 +31,7 @@ jobs:
       run: pipx run build --sdist ./bindings/python
 
     - name: Check metadata
-      run: pipx run twine check dist/*
+      run: pipx run twine check ./bindings/python/dist/*
 
     - uses: actions/upload-artifact@v4
       with:
@@ -52,29 +52,19 @@ jobs:
       with:
         submodules: true
 
-    - name: Install dependencies
-      if: matrix.config.name != 'Tarball'
-      run:  |
-        if [ "$RUNNER_OS" == "Linux" ]; then
-          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
-          # sudo apt update # we will install these later in an isolated container managed by cibuildwheel
-          # sudo apt install cmake libboost-dev libasound-dev libjack-jackd2-dev clang libc++-dev
-        elif [ "$RUNNER_OS" == "Windows" ]; then
-          curl -L https://github.com/ossia/sdk/releases/download/sdk31/boost_1_86_0.tar.gz > boost.tar.gz
-          tar -xzf boost.tar.gz -C /c/
-          ln -s /c/boost_1_86_0/boost /c/boost
-          rm boost.tar.gz
-        else
-          curl -L https://github.com/ossia/sdk/releases/download/sdk31/boost_1_86_0.tar.gz > boost.tar.gz
-          tar -xzf boost.tar.gz
-          # export ROOT_BOOST perhaps?
-          rm boost.tar.gz
-        fi
-      shell: bash
-      
+    - name: Install boost
+      uses: MarkusJx/install-boost@v2.5.0
+      id: install-boost
+      with:
+          boost_version: 1.86.0
+
     - uses: pypa/cibuildwheel@v2.22
       with:
         package-dir: ./bindings/python
+      env:
+        CIBW_BUILD: "cp38-* cp39-* cp311-* cp313*"
+        BOOST_ROOT: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
+        BOOST_ROOT_PIPELINE: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
 
     - name: Verify clean directory
       run: git diff --exit-code
