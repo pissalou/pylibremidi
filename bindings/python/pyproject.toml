@@ -43,8 +43,11 @@ build-verbosity = 1
 [tool.cibuildwheel.linux]
 # On linux, builds take place in isolated containers managed by cibuildwheel
 # This command will run inside the container before the wheel builds start.
-before-all = "yum install -y libasound-dev libjack-jackd2-dev"
-test-command = "yum info libasound-dev libjack-jackd2-dev"
+# before-all = "apt install -y libasound-dev libjack-jackd2-dev" # debian distros
+before-all = "yum install -y alsa-lib-devel jack-audio-connection-kit-devel" # redhat distros
+
+[tool.cibuildwheel.windows]
+skip = ["*win32"]
 
 # Needed for full C++17 support
 [tool.cibuildwheel.macos.environment]
