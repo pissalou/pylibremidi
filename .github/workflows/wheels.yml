@@ -62,7 +62,7 @@ jobs:
       with:
         package-dir: ./bindings/python
       env:
-        CIBW_BUILD: "cp38-* cp39-* cp311-* cp313*"
+        CIBW_BUILD: "cp311-*"
         BOOST_ROOT: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
         BOOST_ROOT_PIPELINE: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
 

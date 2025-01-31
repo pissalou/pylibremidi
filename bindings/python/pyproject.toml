@@ -3,7 +3,7 @@ requires = ["scikit-build-core >=0.10", "nanobind >=1.3.2"]
 build-backend = "scikit_build_core.build"
 
 [project]
-name = "libremidi"
+name = "pylibremidi"
 version = "0.0.1"
 description = "A modern MIDI 1 / MIDI 2 real-time & file I/O library. Supports Windows, macOS, Linux and WebMIDI."
 readme = "../../README.md"
@@ -28,6 +28,9 @@ build-dir = "build/{wheel_tag}"
 
 # Build stable ABI wheels for CPython 3.12+
 wheel.py-api = "cp312"
+
+# A list of packages to auto-copy into the wheel
+wheel.packages = ["bindings/python/<package>", "python/<package>", "<package>"]
 
 [tool.cibuildwheel]
 # Necessary to see build output from the actual compilation
