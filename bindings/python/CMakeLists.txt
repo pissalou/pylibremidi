@@ -19,4 +19,4 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(nanobind)
 nanobind_add_module(pylibremidi pylibremidi.cpp)
-target_link_libraries(pylibremidi PUBLIC libremidi readerwriterqueue)
+install(TARGETS pylibremidi LIBRARY DESTINATION .)
