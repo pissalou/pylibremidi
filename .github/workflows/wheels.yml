@@ -67,6 +67,8 @@ jobs:
         BOOST_ROOT_PIPELINE: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
         CIBW_ENVIRONMENT_PASS_LINUX: BOOST_ROOT BOOST_ROOT_PIPELINE
         CIBW_BEFORE_ALL_LINUX: "mkdir -p $(dirname $BOOST_ROOT) && ln -s /host/$BOOST_ROOT $BOOST_ROOT" # By default, cibuildwheel will mount the root of the host filesystem as a volume at /host in the container
+        CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+        CIBW_MANYLINUX_I686_IMAGE: manylinux_2_28
 
     - name: Verify clean directory
       run: git diff --exit-code
