@@ -66,9 +66,10 @@ jobs:
         BOOST_ROOT: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
         BOOST_ROOT_PIPELINE: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
         CIBW_ENVIRONMENT_PASS_LINUX: BOOST_ROOT BOOST_ROOT_PIPELINE
-        CIBW_BEFORE_ALL_LINUX: "mkdir -p $(dirname $BOOST_ROOT) && ln -s /host/$BOOST_ROOT $BOOST_ROOT" # By default, cibuildwheel will mount the root of the host filesystem as a volume at /host in the container
+        # By default, cibuildwheel will mount the root of the host filesystem as a volume at /host in the container
+        CIBW_BEFORE_ALL_LINUX: 'for lib_root in /usr/include/alsa /usr/include/jack "$BOOST_ROOT"; do mkdir -p "$(dirname "$lib_root")" && ln -s "/host/$lib_root" "$lib_root"; done'
         CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
-        CIBW_SKIP: "*-win32 *-manylinux_i686" # Skip 32-bit builds
+        CIBW_SKIP: "*-win64 *-manylinux_i686" # Skip 64-bit on win and 32-bit on lnx
 
     - name: Verify clean directory
       run: git diff --exit-code
