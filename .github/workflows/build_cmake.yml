@@ -80,3 +80,8 @@ jobs:
         # fi
         cmake --build build --config Debug --target ${{ matrix.config.test_target }}
       shell: bash
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: libremidi
+        path: build/*
