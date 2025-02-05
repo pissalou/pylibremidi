@@ -1,0 +1,82 @@
+name: Build
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        boost: [1]
+        header_only: [1]
+        config:
+        - {
+            name: "Windows (MSVC)",
+            os: windows-latest,
+            generator: "",
+            cmakeflags: "-DLIBREMIDI_NO_WINUWP=0 -DBOOST_ROOT=$PWD/boost_1_86_0 -DCMAKE_GENERATOR_PLATFORM=version=10.0.22621.0",
+            test_target: "RUN_TESTS",
+            tests: 1,
+            examples: 1
+          }
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Get latest release version number
+      id: get_version
+      uses: dhkatz/get-version-action@main
+
+    - name: Install dependencies
+      if: matrix.config.name != 'Tarball'
+      run:  |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+          sudo apt update
+          sudo apt install cmake libboost-dev libasound-dev libjack-jackd2-dev clang libc++-dev
+        else
+          curl -L https://github.com/ossia/sdk/releases/download/sdk31/boost_1_86_0.tar.gz > boost.tar.gz
+          tar -xzf boost.tar.gz
+          rm boost.tar.gz
+        fi
+      shell: bash
+
+    - name: Configure
+      if: matrix.config.name != 'Tarball'
+      shell: bash
+      run: |
+        cmake -S . -B build \
+          ${{ matrix.config.generator }} \
+          ${{ matrix.config.cmakeflags }} \
+          -DLIBREMIDI_FIND_BOOST=${{ matrix.boost }} \
+          -DLIBREMIDI_HEADER_ONLY=${{ matrix.header_only }} \
+          -DLIBREMIDI_EXAMPLES=${{ matrix.config.examples }}  \
+          -DLIBREMIDI_TESTS=${{ matrix.config.tests }} \
+          -DLIBREMIDI_CI=1 \
+          -DCMAKE_CTEST_ARGUMENTS="--rerun-failed;--output-on-failure" \
+          -DCMAKE_INSTALL_PREFIX=install
+
+    - name: Build
+      if: matrix.config.name != 'Tarball'
+      run: |
+        cmake --build build --config Debug
+        cmake --build build --config Debug --target install
+
+    - name: Test
+      if: matrix.config.name != 'Tarball' && matrix.config.name != 'iOS'
+      run: |
+        # Not available on GH actions...
+        # if [ "$RUNNER_OS" == "Linux" ]; then
+        #   sudo modprobe snd-virmidi midi_devs=1
+        # fi
+        cmake --build build --config Debug --target ${{ matrix.config.test_target }}
+      shell: bash
