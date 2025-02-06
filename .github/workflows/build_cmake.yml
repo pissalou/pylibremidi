@@ -68,8 +68,8 @@ jobs:
     - name: Build
       if: matrix.config.name != 'Tarball'
       run: |
-        cmake --build build --config Debug
-        cmake --build build --config Debug --target install
+        cmake --build build --config Release
+        cmake --build build --config Release --target install
 
     - name: Test
       if: matrix.config.name != 'Tarball' && matrix.config.name != 'iOS'
@@ -78,7 +78,7 @@ jobs:
         # if [ "$RUNNER_OS" == "Linux" ]; then
         #   sudo modprobe snd-virmidi midi_devs=1
         # fi
-        cmake --build build --config Debug --target ${{ matrix.config.test_target }}
+        cmake --build build --config Release --target ${{ matrix.config.test_target }}
       shell: bash
 
     - uses: actions/upload-artifact@v4
