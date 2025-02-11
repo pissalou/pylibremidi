@@ -1,4 +1,4 @@
-name: Wheels
+name: Build python wheels
 
 on:
   workflow_dispatch:
@@ -62,7 +62,7 @@ jobs:
       with:
         package-dir: ./bindings/python
       env:
-        CIBW_BUILD: "cp311-*"
+        CIBW_BUILD: "cp311-* cp313*"
         BOOST_ROOT: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
         BOOST_ROOT_PIPELINE: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
         CIBW_ENVIRONMENT_PASS_LINUX: BOOST_ROOT BOOST_ROOT_PIPELINE
