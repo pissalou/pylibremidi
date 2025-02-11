@@ -33,6 +33,9 @@ wheel.py-api = ""
 wheel.packages = ["bindings/python/<package>", "python/<package>", "<package>"]
 
 [tool.cibuildwheel]
+# Enable free-threaded support
+enable = ["cpython-freethreading"]
+
 # Necessary to see build output from the actual compilation
 build-verbosity = 1
 
