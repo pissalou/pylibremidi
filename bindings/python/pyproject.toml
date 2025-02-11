@@ -26,8 +26,8 @@ minimum-version = "build-system.requires"
 # Setuptools-style build caching in a local directory
 build-dir = "build/{wheel_tag}"
 
-# Build stable ABI wheels for CPython 3.12+
-wheel.py-api = "cp312"
+# Do not build stable ABI wheels because free-threading Python 3.13+ doesn't support it
+wheel.py-api = ""
 
 # A list of packages to auto-copy into the wheel
 wheel.packages = ["bindings/python/<package>", "python/<package>", "<package>"]
