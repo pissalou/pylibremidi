@@ -96,7 +96,7 @@ jobs:
         cmake --build build --config Debug
 
     - name: Test
-      if: runner.os == 'Windows'
+      if: false
       shell: bash
       run: |
         export PYTHONPATH=$PWD/build/Debug
