@@ -96,7 +96,7 @@ jobs:
         cmake --build build --config Release
 
     - name: Test
-      if: false
+      if: runner.os == 'Windows'
       shell: bash
       run: |
         export PYTHONPATH=$PWD/build/Debug
@@ -104,17 +104,18 @@ jobs:
         # ${{matrix.config.environment}} python tests/python/list_apis.py
 
     - name: Test
-      if: false
+      if: runner.os != 'Windows
       shell: bash
       run: |
         export PYTHONPATH=$PWD/build
         export ASAN_OPTIONS=detect_leaks=0
-        ${{matrix.config.environment}} python tests/python/list_apis.py
+        find . -name '*.so'
+        # ${{matrix.config.environment}} python tests/python/list_apis.py
 
     - name: Upload pyd/so
       uses: actions/upload-artifact@v4
       with:
         path: |
-          ./build/Release/pylibremidi.*.so
-          ./build/Release/pylibremidi.*.pyd
+          ./build/**/pylibremidi.*.so
+          ./build/**/pylibremidi.*.pyd
         name: pylibremidi-${{ matrix.config.os }}-h${{ matrix.header_only }}
