@@ -111,8 +111,10 @@ jobs:
         export ASAN_OPTIONS=detect_leaks=0
         ${{matrix.config.environment}} python tests/python/list_apis.py
 
-    - name: Upload pyd
+    - name: Upload pyd/so
       uses: actions/upload-artifact@v4
       with:
-        path: ./build/Release/*.pyd
+        path: |
+          ./pylibremidi.*.so
+          ./build/Release/pylibremidi.*.pyd
         name: pylibremidi-${{ matrix.config.os }}-h${{ matrix.header_only }}
