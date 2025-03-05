@@ -115,6 +115,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         path: |
-          ./pylibremidi.*.so
+          ./build/Release/pylibremidi.*.so
           ./build/Release/pylibremidi.*.pyd
         name: pylibremidi-${{ matrix.config.os }}-h${{ matrix.header_only }}
