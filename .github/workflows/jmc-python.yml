@@ -104,7 +104,7 @@ jobs:
         # ${{matrix.config.environment}} python tests/python/list_apis.py
 
     - name: Test
-      if: runner.os != 'Windows
+      if: runner.os != 'Windows'
       shell: bash
       run: |
         export PYTHONPATH=$PWD/build
