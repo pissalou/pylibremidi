@@ -93,7 +93,7 @@ jobs:
 
     - name: Build
       run: |
-        cmake --build build --config Debug
+        cmake --build build --config Release
 
     - name: Test
       if: false
@@ -114,5 +114,5 @@ jobs:
     - name: Upload pyd
       uses: actions/upload-artifact@v4
       with:
-        path: ./build/Debug/*.pyd
-        name: pylibremidi-${{ matrix.os }}
+        path: ./build/Release/*.pyd
+        name: pylibremidi-${{ matrix.config.os }}-h${{ matrix.header_only }}
