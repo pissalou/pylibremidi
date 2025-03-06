@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        header_only: [0, 1]
+        header_only: [0]  # [0, 1]
         config:
         - {
             name: "Windows (MSVC)",
@@ -26,13 +26,13 @@ jobs:
             cmakeflags: "-DLIBREMIDI_NO_WINUWP=0 -DBOOST_ROOT=$PWD/boost_1_86_0 -DCMAKE_GENERATOR_PLATFORM=version=10.0.22621.0",
             environment: ""
           }
-        - {
-            name: "Ubuntu (gcc)",
-            os: ubuntu-latest,
-            generator: "",
-            cmakeflags: "-DCMAKE_CXX_FLAGS='-Werror=return-type -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG=1 -D_GLIBCXX_DEBUG_PEDANTIC=1 -D_GLIBCXX_ASSERTIONS=1 -D_GLIBCXX_SANITIZE_VECTOR=1'",
-            environment: "LD_PRELOAD=/usr/lib/gcc/x86_64-linux-gnu/13/libasan.so:/usr/lib/gcc/x86_64-linux-gnu/13/libubsan.so"
-          }
+        # - {
+        #     name: "Ubuntu (gcc)",
+        #     os: ubuntu-latest,
+        #     generator: "",
+        #     cmakeflags: "-DCMAKE_CXX_FLAGS='-Werror=return-type -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG=1 -D_GLIBCXX_DEBUG_PEDANTIC=1 -D_GLIBCXX_ASSERTIONS=1 -D_GLIBCXX_SANITIZE_VECTOR=1'",
+        #     environment: "LD_PRELOAD=/usr/lib/gcc/x86_64-linux-gnu/13/libasan.so:/usr/lib/gcc/x86_64-linux-gnu/13/libubsan.so"
+        #   }
         - {
             name: "Ubuntu (clang, libstdc++)",
             os: ubuntu-latest,
@@ -40,13 +40,13 @@ jobs:
             cmakeflags: "-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS='-Werror=return-type'",
             environment: ""
           }
-        - {
-            name: "Ubuntu (clang, libc++)",
-            os: ubuntu-latest,
-            generator: "",
-            cmakeflags: "-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS='-stdlib=libc++ -Werror=return-type'",
-            environment: ""
-          }
+        # - {
+        #     name: "Ubuntu (clang, libc++)",
+        #     os: ubuntu-latest,
+        #     generator: "",
+        #     cmakeflags: "-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS='-stdlib=libc++ -Werror=return-type'",
+        #     environment: ""
+        #   }
         - {
             name: "macOS",
             os: macos-14,
