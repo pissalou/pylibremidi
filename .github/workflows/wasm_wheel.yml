@@ -1,0 +1,50 @@
+name: Build wasm32 wheel
+
+on:
+  workflow_dispatch:
+  pull_request:
+  # push:
+  #   branches:
+  #    - master
+  release:
+    types:
+      - published
+
+jobs:
+  build_wheel:
+    name: Pyodide wheel
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Install boost
+      uses: MarkusJx/install-boost@v2.5.0
+      id: install-boost
+      with:
+          boost_version: 1.86.0
+
+    - uses: pypa/cibuildwheel@v2.22
+      with:
+        package-dir: ./bindings/python
+      env:
+        CIBW_PLATFORM: 'pyodide'
+        BOOST_ROOT: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
+        BOOST_ROOT_PIPELINE: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
+        CIBW_ENVIRONMENT_PASS_LINUX: BOOST_ROOT BOOST_ROOT_PIPELINE
+        # By default, cibuildwheel will mount the root of the host filesystem as a volume at /host in the container
+        CIBW_BEFORE_ALL_LINUX: 'for lib_root in /usr/include/alsa /usr/include/jack "$BOOST_ROOT"; do mkdir -p "$(dirname "$lib_root")" && ln -s "/host/$lib_root" "$lib_root"; done'
+
+    - name: Verify clean directory
+      run: git diff --exit-code
+      shell: bash
+
+    - name: Upload wheels
+      uses: actions/upload-artifact@v4
+      with:
+        name: cp312-pyodide_wasm32
+        path: wheelhouse/*.whl
