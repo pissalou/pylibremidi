@@ -60,3 +60,9 @@ jobs:
     - name: List wasm targets
       run: |
         find . -name '*.html'
+
+    - name: Upload targets
+      uses: actions/upload-artifact@v4
+      with:
+        name: emscripten_libremidi
+        path: ./build/emscripten_*.html
