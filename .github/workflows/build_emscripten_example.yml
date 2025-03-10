@@ -59,7 +59,7 @@ jobs:
 
     - name: List wasm targets
       run: |
-        find . -name '*.html' -or -name '*.js'
+        find ./build -name '*.html' -or -name '*.js' -or -name '*.wasm'
 
     - name: Upload targets
       uses: actions/upload-artifact@v4
@@ -68,3 +68,4 @@ jobs:
         path: |
           ./build/emscripten_*.html
           ./build/emscripten_*.js
+          ./build/emscripten_*.wasm
