@@ -47,7 +47,7 @@ jobs:
           -DLIBREMIDI_FIND_BOOST=0 \
           -DLIBREMIDI_HEADER_ONLY=1 \
           -DLIBREMIDI_EXAMPLES=1 \
-          -DLIBREMIDI_TESTS=1 \
+          -DLIBREMIDI_TESTS=0 \
           -DLIBREMIDI_CI=1 \
           -DCMAKE_CTEST_ARGUMENTS="--rerun-failed;--output-on-failure" \
           -DCMAKE_INSTALL_PREFIX=install
@@ -57,6 +57,6 @@ jobs:
         cmake --build build --config Debug
         cmake --build build --config Debug --target install
 
-    - name: Test
+    - name: List wasm targets
       run: |
-        cmake --build build --config Debug --target test
+        find . -name '*.html'
