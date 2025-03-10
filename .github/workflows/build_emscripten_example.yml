@@ -43,7 +43,7 @@ jobs:
     - name: Configure
       run: |
         emcmake cmake -S . -B build \
-          -DLIBREMIDI_FIND_BOOST=1 \
+          -DLIBREMIDI_FIND_BOOST=0 \
           -DLIBREMIDI_HEADER_ONLY=1 \
           -DLIBREMIDI_EXAMPLES=1 \
           -DLIBREMIDI_TESTS=1 \
