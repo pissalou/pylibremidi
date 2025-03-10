@@ -22,6 +22,15 @@ jobs:
       with:
         submodules: true
 
+    - name: Install dependencies
+      shell: bash
+      run:  |
+        apt-get update -qq
+        apt-get install -qq --force-yes \
+          build-essential binutils gcc g++ \
+          libc++-dev \
+          libboost-dev 
+  
     - uses: mymindstorm/setup-emsdk@v14
       with:
         # Make sure to set a version number!
