@@ -1,0 +1,35 @@
+name: Build wasm32/webmidi example
+
+on:
+  workflow_dispatch:
+  pull_request:
+  # push:
+  #   branches:
+  #    - master
+  release:
+    types:
+      - published
+
+jobs:
+  build_wasm:
+    name: Build Emscripten/WASM example
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - uses: mymindstorm/setup-emsdk@v14
+      with:
+        # Make sure to set a version number!
+        version: 3.1.58  # ideally the same version as cibuildwheel is using
+        # This is the name of the cache folder.
+        # The cache folder will be placed in the build directory,
+        #  so make sure it doesn't conflict with anything!
+        actions-cache-folder: 'emsdk-cache'
+
+    - name: Verify EMSDK
+      run: emcc -v
