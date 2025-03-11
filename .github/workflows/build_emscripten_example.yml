@@ -94,6 +94,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: emscripten_libremidi
+          path: emscripten_libremidi
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload gh pages artifact
@@ -103,3 +104,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Display URL
+        run: echo ${{ steps.deployment.outputs.page_url }}
