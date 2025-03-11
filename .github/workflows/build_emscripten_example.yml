@@ -105,4 +105,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Display URL
-        run: echo ${{ steps.deployment.outputs.page_url }}
+        run: echo "Emscripten example ${{ steps.deployment.outputs.page_url }}/emscripten_midiin.html"
